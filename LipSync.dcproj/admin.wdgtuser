@@ -25,11 +25,11 @@
 	<key>Dashboard Widget Prefs</key>
 	<dict>
 		<key>id</key>
-		<string>8a748330dc61b041</string>
+		<string>bd1b5fd7e261b041</string>
 		<key>in-layer</key>
 		<true/>
 		<key>path</key>
-		<string>/private/var/folders/Un/UnxUHwCPHWKctaUXGCL53k+++TI/-Tmp-/Dashcode/.LipSync.dcprojy3Ysk4/LipSync.dcproj/project.wdgt/</string>
+		<string>/private/var/folders/Un/UnxUHwCPHWKctaUXGCL53k+++TI/-Tmp-/Dashcode/.LipSync.dcprojyvugiZ/LipSync.dcproj/project.wdgt/</string>
 		<key>percent-offset-x</key>
 		<integer>0</integer>
 		<key>percent-offset-y</key>
@@ -37,13 +37,13 @@
 		<key>percent-type</key>
 		<integer>2</integer>
 		<key>percent-x</key>
-		<real>0.21979166567325592</real>
+		<real>0.21927084028720856</real>
 		<key>percent-y</key>
-		<real>0.18083333969116211</real>
+		<real>0.16583333909511566</real>
 		<key>pos-x</key>
-		<integer>1198</integer>
+		<integer>1199</integer>
 		<key>pos-y</key>
-		<integer>217</integer>
+		<integer>199</integer>
 		<key>rosetta</key>
 		<false/>
 	</dict>
@@ -226,6 +226,7 @@
 			<integer>0</integer>
 			<integer>0</integer>
 			<integer>2</integer>
+			<integer>2</integer>
 			<integer>0</integer>
 		</array>
 	</array>
@@ -236,7 +237,7 @@
 	<key>Visible StackLayout Views</key>
 	<array>
 		<string>front</string>
-		<string>main</string>
+		<string>successAE</string>
 	</array>
 </dict>
 </plist>

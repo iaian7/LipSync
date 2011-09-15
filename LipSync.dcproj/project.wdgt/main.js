@@ -237,21 +237,22 @@ function dragOver(event) {
 function dragDrop(event) {
 	try {
 		uri = event.dataTransfer.getData("text/uri-list");
-
+alert("uri = "+uri);
 		uri = uri.replace(/file:\/\/localhost/g, "");
 		uri = uri.replace(/\%20/g, "\\ ");
 //		uri = uri.replace(/\n/g, " ");
 
-//		if (uri.match("\n")) {
-			uri = uri.split("\n");
-			for(var i in uri) {
-				alert("uri[i] = "+uri[i]);
-				if (uri[i].length>2) widget.system("cat "+uri[i], processInput).outputString;
-			}
-//		} else {
-//			alert("uri = "+uri);
-//			widget.system("cat "+uri, processInput).outputString;
-//		}
+		if (uri.match("\n")) {
+			showFail();
+//			uri = uri.split("\n");
+//			for(var i in uri) {
+//				alert("uri[i] = "+uri[i]);
+//				if (uri[i].length>2) widget.system("cat "+uri[i], processInput).outputString;
+//			}
+		} else {
+			alert("uri = "+uri);
+			widget.system("cat "+uri, processInput).outputString;
+		}
 	} catch (ex) {
 		alert("Problem fetching URI: " + ex);
 		showFail(event);
