@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="Parts/Transitions.css">
+    <script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleAnimator.js" charset="utf-8"></script>
+    <script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleButton.js" charset="utf-8"></script>
+    <script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleInfoButton.js" charset="utf-8"></script>
+    <script type="text/javascript" src="localizedStrings.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/utilities.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/setup.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/Text.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/InfoButton.js" charset="utf-8"></script>
+    <script type="text/javascript" src="main.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/PopupButton.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/Transitions.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/StackLayout.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Parts/Button.js" charset="utf-8"></script>
+</head>
+<body onload="load();">
+    <div id="front">
+        <img id="frontImg" src="Images/front.png" alt="">
+        <div id="info"></div>
+        <div id="stack"><div id="main">
+                <div id="input" ondrop="dragDrop(event)" ondragover="dragOver(event)" ondragenter="dragEnter(event)">
+                    <div id="drop"></div>
+                </div>
+                <input type="text" name="fps" value="30fps" id="fps" onkeydown="keyboard(event)" onchange="updateFPS(event)" onkeyup="updateFPS(event)" onclick="selectIt(event)" onfocus="selectIt(event)">
+                <div id="keyframe"></div>
+                <div id="phoneme"></div>
+            </div><div id="success">
+                <div id="successText"></div>
+                <div id="successText2"></div>
+                <div id="successButton"></div>
+            </div><div id="successAE" style="display: block; ">
+                <div id="successTextAE"></div>
+                <div id="successTextAE2"></div>
+                <div id="successTextAEoutput"></div>
+                <div id="successButtonAE"></div>
+            </div><div id="empty">
+                <div id="emptyText"></div>
+                <div id="failButton1"></div>
+            </div><div id="fail" style="display: block; ">
+                <div id="failText"></div>
+                <div id="failButton"></div>
+            </div><div id="wrong" style="display: block; ">
+                <div id="wrongText"></div>
+                <div id="wrongButton"></div>
+            </div><div id="update">
+                <div id="new"></div>
+                <div id="newVersion"></div>
+                <div id="skip"></div>
+                <div id="download"></div>
+            </div></div>
+    </div>
+    <div id="back">
+        <img id="backImg" src="Images/back.png" alt="">
+        <input type="text" name="preset1" value="custom 1" id="preset1" onchange="updatePreset(event)" onkeyup="updatePreset(event)">
+        <input type="text" name="fps" value="custom 2" id="preset2" onchange="updatePreset(event)" onkeyup="updatePreset(event)">
+        <div id="doneSave"></div>
+        <div id="explanation"></div>
+        <div id="iaian7com" onclick="iaian7(event)"></div>
+        <div id="preset1text"></div>
+        <div id="preset2text"></div>
+        <div id="text"></div>
+    </div>
+</body>
+</html>
