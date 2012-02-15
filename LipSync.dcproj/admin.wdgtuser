@@ -7,17 +7,13 @@
 		<key>ContentSplitViewConfig</key>
 		<integer>8</integer>
 		<key>SplitViewConfig</key>
-		<integer>3</integer>
-		<key>_collapsingFrameDimension</key>
-		<real>0.0</real>
+		<integer>1</integer>
 		<key>_indexOfCollapsedView</key>
 		<integer>0</integer>
-		<key>_percentageOfCollapsedView</key>
-		<real>0.0</real>
 		<key>sizes</key>
 		<array>
-			<string>{{0, 0}, {1675, 404}}</string>
-			<string>{{0, 414}, {1675, 625}}</string>
+			<string>{{0, 0}, {1675, 402}}</string>
+			<string>{{0, 412}, {1675, 627}}</string>
 		</array>
 	</dict>
 	<key>ContentViewType</key>
@@ -49,23 +45,25 @@
 	</dict>
 	<key>DeploymentOptions</key>
 	<dict>
+		<key>Destination</key>
+		<string>aos.default</string>
 		<key>Save</key>
 		<false/>
 		<key>SavePath</key>
 		<string>/Users/admin/Dropbox/Documents/Widgets/VF LipSync</string>
 		<key>WidgetDeployName</key>
 		<string>LipSync</string>
+		<key>enableSimulation</key>
+		<true/>
+		<key>simulatedHost</key>
+		<string>web.me.com</string>
 	</dict>
 	<key>Design time language</key>
 	<string>en.lproj</string>
 	<key>MainSplitViewGeometry</key>
 	<dict>
-		<key>_collapsingFrameDimension</key>
-		<real>0.0</real>
 		<key>_indexOfCollapsedView</key>
 		<integer>0</integer>
-		<key>_percentageOfCollapsedView</key>
-		<real>0.0</real>
 		<key>sizes</key>
 		<array>
 			<string>{{0, 0}, {244, 1060}}</string>
@@ -79,17 +77,13 @@
 		<key>ContentSplitViewConfig</key>
 		<integer>5</integer>
 		<key>SplitViewConfig</key>
-		<integer>3</integer>
-		<key>_collapsingFrameDimension</key>
-		<real>0.0</real>
+		<integer>1</integer>
 		<key>_indexOfCollapsedView</key>
 		<integer>0</integer>
-		<key>_percentageOfCollapsedView</key>
-		<real>0.0</real>
 		<key>sizes</key>
 		<array>
-			<string>{{0, 0}, {246, 634}}</string>
-			<string>{{0, 644}, {246, 395}}</string>
+			<string>{{0, 0}, {246, 353}}</string>
+			<string>{{0, 363}, {246, 676}}</string>
 		</array>
 	</dict>
 	<key>Objects view expanded items</key>
@@ -239,5 +233,15 @@
 		<string>front</string>
 		<string>successAE</string>
 	</array>
+	<key>Widget</key>
+	<dict>
+		<key>Objects view last selections</key>
+		<array/>
+		<key>Visible StackLayout Views</key>
+		<array>
+			<string>front</string>
+			<string>main</string>
+		</array>
+	</dict>
 </dict>
 </plist>
