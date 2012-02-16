@@ -30,7 +30,7 @@ function PopupButton(popupElement, spec)
     if (spec.originalID) {
         styleElement = document.getElementById(spec.originalID);
     }
-    var imagePrefix = "Images/" + styleElement.id + "_";
+    var imagePrefix = "Parts/Images/" + styleElement.id + "_";
     var width = dashcode.getElementWidth(styleElement) || 20;
 	var height = dashcode.getElementHeight(styleElement) || 20;
 	var _self = this;
@@ -42,7 +42,7 @@ function PopupButton(popupElement, spec)
         popupElement.removeChild(popupElement.firstChild);
     }
 	this.button = new AppleButton(popupElement, '', height, imagePrefix + "left.png", imagePrefix + "left_clicked.png", leftImageWidth, imagePrefix + "middle.png", imagePrefix + "middle_clicked.png", imagePrefix + "right.png", imagePrefix + "right_clicked.png", rightImageWidth, null);
-	this.button._container.childNodes.item(2).style.width = rightImageWidth + "px";
+	this.button._container.childNodes[2].style.width = rightImageWidth + "px";
 	this.button.textElement.style.width = (width - (leftImageWidth + rightImageWidth)) + "px";
 	this.button.textElement.style.textIndent = Math.max(10-leftImageWidth, 0) + "px";
 	var eventsDiv = document.createElement("div");

@@ -40,9 +40,22 @@ Transition.BOTTOM_TO_TOP_DIRECTION = 'bottom-top';
 // duration     - a float in seconds
 // timing       - a valid CSS animation timing function value. For example, 'linear' or 'ease-in-out'
 //
-// After construction, you can also assign one of the direction constants above to the "direction" property 
-// to set the transition direction for transition types that support different directions (see comments above.)
+// After construction, you can also assign one of the direction constants above to the "direction" property to set the transition direction for transition types that support different directions (see comments above.)
 //
+// Public properties
+//    startTransitionCallback: function to call when a transition will start
+//        The callback function will receive 3 parameters: (transition, startView, endView)
+//            transition: The transition object that will perform the transition
+//            startView: The start view element for the transition
+//            endView: The destination view element for the transition
+//    endTransitionCallback: function to call when a transition did end
+//        The callback function will receive 3 parameters: (transition, startView, endView)
+//            transition: The transition object that performed the transition
+//            startView: The start view element for the transition
+//            endView: The destination view element for the transition
+
+
+
 function Transition(type, duration, timing)
 {
     this.type = type;
@@ -133,8 +146,8 @@ Transition.prototype.perform = function(newView, oldView, isReverse)
     
     // Make sure that container is constraining the transitions for overflow content
     containerElement.style.overflow = 'hidden';
-    var computedStyle = document.defaultView.getComputedStyle(containerElement, null);
-    if ((computedStyle.getPropertyValue('position') != 'absolute') && (computedStyle.getPropertyValue('position') != 'relative')) {
+    var computedPosition = Element.getStyles(containerElement, 'position');
+    if ((computedPosition != 'absolute') && (computedPosition != 'relative')) {
         // Assume 'static' since we don't support 'fixed'. 'relative' is less obtrusive then.
         containerElement.style.position = 'relative';
     }
@@ -156,6 +169,11 @@ Transition.prototype.perform = function(newView, oldView, isReverse)
     newStyle.position = 'relative';
     newStyle.display = 'block';
 
+    // if specified, call the public start transition callback
+    if (this.startTransitionCallback) {
+        this.startTransitionCallback(this, oldView, newView);
+    }
+    
     // Perform the transition
     if (this.type && this.type != Transition.NONE_TYPE && this._useTransforms) {
         this._checkedForEnded = false;
@@ -199,12 +217,20 @@ Transition.prototype.perform = function(newView, oldView, isReverse)
         else if (this.type == Transition.REVOLVE_TYPE) {
             this._performRevolveTransition(isReverse);
         }
+    } else {
+        // if specified, call the transition ended callbacks directly
+        if (this._privateEndTransitionCallback) {
+            this._privateEndTransitionCallback(this, oldView, newView);
+        }
+        if (this.endTransitionCallback) {
+            this.endTransitionCallback(this, oldView, newView);
+        }
     }
 }
 
 Transition.areTransformsSupported = function () {
     if (!Transition._areTransformsSupported) {
-        // Our use of transforms and transitions is only officially supported for the iPhone and does not work correctly in desktop WebKit.
+        // Our use of transforms and transitions is only officially supported for mobile Safari and does not work correctly in Safari WebKit.
         // The commented out test would be more correct if desktop WebKit were also supported.
         /*
         var testElem = document.createElement('div');
@@ -213,7 +239,7 @@ Transition.areTransformsSupported = function () {
         Transition._areTransformsSupported = style.getPropertyValue('-webkit-transform') == 'inherit';
          */
         
-        // But currently, we are using the following test which succeeds on the iPhone but not on the desktop.
+        // But currently, we are using the following test which succeeds on Mobile Safari but not on Safari.
         Transition._areTransformsSupported = (window.WebKitCSSMatrix ? true : false);
     }
     return Transition._areTransformsSupported;
@@ -361,6 +387,14 @@ Transition.prototype._transitionEndedHelper = function()
     }
     
     this._containerElement.style.height = this._originalContainerElementHeight;
+    
+    // if specified, call the public and private transition end callback
+    if (this._privateEndTransitionCallback) {
+        this._privateEndTransitionCallback(this, this._oldView, this._newView);
+    }
+    if (this.endTransitionCallback) {
+        this.endTransitionCallback(this, this._oldView, this._newView);
+    }
 }
 
 // Callback for end of transition
@@ -417,7 +451,7 @@ Transition.prototype._animationEnded = function(event)
         
         if (this.type == Transition.FLIP_TYPE) {
             Transition._removeClassName(this._containerElement, 'dashcode-transition-flip-container');
-            Transition._removeClassName(this._flipContainer, 'dashcode-transition-flip-container-pushback');
+            Transition._removeClassName(this._pushContainer, 'dashcode-transition-flip-container-pushback');
         }
         
         this._checkedForEnded = true;
@@ -456,7 +490,7 @@ Transition.prototype._performFadeTransition = function(isReverse)
         });
         
         // Register a callback for the end of the animation for clean up and/or resets
-        this._newView.addEventListener('webkitTransitionEnd', this, false);
+        Event.observe(this._newView, 'webkitTransitionEnd', this);
     }
 }
 
@@ -471,7 +505,7 @@ Transition.prototype._performPushOrSlideTransition = function(isReverse)
         var transformX = true;
         
         var factor = isReverse ? -1 : 1;
-        var dimension = parseInt(this._containerWidth);
+        var dimension = parseInt(this._containerWidth, 10);
         if (this.direction == Transition.BOTTOM_TO_TOP_DIRECTION) {
             transformX = false;
             dimension = isReverse ? this._newView.offsetHeight : this._oldView.offsetHeight;
@@ -514,7 +548,7 @@ Transition.prototype._performPushOrSlideTransition = function(isReverse)
         });
         
         // Register a callback for the end of the animation for clean up and/or resets
-        this._newView.addEventListener('webkitTransitionEnd', this, false);
+        Event.observe(this._newView, 'webkitTransitionEnd', this);
     }
 }
 
@@ -525,7 +559,7 @@ Transition.prototype._performFlipTransition = function(isReverse)
         var newStyle = this._newView.style;
         var oldStyle = this._oldView.style;
         
-        var dimension = parseInt(this._containerWidth);
+        var dimension = parseInt(this._containerWidth, 10);
         if (dimension != 320) {
             if (Transition._containerFlipTranslateZStyle === undefined) {
                 var animationRule = Transition._findAnimationRule('dashcode-transition-flip-container-pushback');
@@ -557,11 +591,6 @@ Transition.prototype._performFlipTransition = function(isReverse)
             }
             this._containerElement.appendChild(this._pushContainer);
         }
-        else {
-            // Workaround an animation perspective problem
-            this._containerElement.removeChild(this._pushContainer);
-            this._containerElement.appendChild(this._pushContainer);
-        }
         
         var durationString = this._getDurationString();
         
@@ -586,7 +615,7 @@ Transition.prototype._performFlipTransition = function(isReverse)
         Transition._addClassName(this._containerElement, 'dashcode-transition-flip-container');        
 
         // Register a callback for the end of the animation for clean up
-        this._containerElement.addEventListener('webkitAnimationEnd', this, false);
+        Event.observe(this._containerElement, 'webkitAnimationEnd', this);
         this._newViewAnimationName = newViewAnimationName;
         this._oldViewAnimationName = oldViewAnimationName;
     }
@@ -611,7 +640,7 @@ Transition.prototype._performCubeTransition = function(isReverse)
         newStyle.webkitTransformOrigin = fromRight ? '0% 50%' : '100% 50%';
         
         var factor = fromRight ? 1 : -1;
-        var dimension = parseInt(this._containerWidth);
+        var dimension = parseInt(this._containerWidth, 10);
         
         newStyle.webkitTransitionProperty = 'none'; // disable
         newStyle.webkitTransform = _self._rotateOp('Y', factor*90) + ' translateZ(' + dimension + 'px)';
@@ -624,7 +653,7 @@ Transition.prototype._performCubeTransition = function(isReverse)
         });
         
         // Register a callback for the end of the animation for clean up and/or resets
-        this._newView.addEventListener('webkitTransitionEnd', this, false);
+        Event.observe(this._newView, 'webkitTransitionEnd', this);
     }
 }
 
@@ -651,7 +680,7 @@ Transition.prototype._performSwapTransition = function(isReverse)
         Transition._addClassName(this._newView, newViewAnimationName);
 
         // Register a callback for the end of the animation for clean up and/or resets
-        this._newView.addEventListener('webkitAnimationEnd', this, false);
+        Event.observe(this._newView, 'webkitAnimationEnd', this);
         this._newViewAnimationName = newViewAnimationName;
         this._oldViewAnimationName = oldViewAnimationName;
     }
@@ -691,7 +720,7 @@ Transition.prototype._performRevolveTransition = function(isReverse)
         Transition._addClassName(this._newView, newViewAnimationName);
 
         // Register a callback for the end of the animation for clean up and/or resets
-        this._newView.addEventListener('webkitAnimationEnd', this, false);
+        Event.observe(this._newView, 'webkitAnimationEnd', this);
         this._newViewAnimationName = newViewAnimationName;
         this._oldViewAnimationName = oldViewAnimationName;
     }
@@ -749,16 +778,18 @@ Transition._removeClassName = function(element, className)
 // Accumulate transitions that will be executed after a 0 delay
 Transition._addDelayedTransitionCallback = function(callback)
 {
-    if (!Transition._delayedCallbacks) {
-        Transition._delayedCallbacks = new Array();
+    var self = Transition;
+    
+    if (!self._delayedCallbacks) {
+        self._delayedCallbacks = new Array();
         var performDelayedCallbacks = function () {
-            var length = Transition._delayedCallbacks.length;
+            var length = self._delayedCallbacks.length;
             for (var f=0; f<length; f++) {
-                Transition._delayedCallbacks[f]();
+                self._delayedCallbacks[f]();
             }
-            delete Transition._delayedCallbacks;
+            delete self._delayedCallbacks;
         }
         setTimeout(performDelayedCallbacks, 0);
     }
-    Transition._delayedCallbacks.push(callback);
+    self._delayedCallbacks.push(callback);
 }

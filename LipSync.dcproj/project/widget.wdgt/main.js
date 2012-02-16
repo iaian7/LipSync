@@ -34,7 +34,7 @@ function remove()
 function hide()
 {
     // Stop any timers to prevent CPU usage
-	savePrefs();
+	updatePrefs();
 }
 
 //
@@ -147,12 +147,6 @@ function loadPrefs() {
 	document.getElementById("preset1").value = prefPreset1;
 	document.getElementById("preset2").value = prefPreset2;
 	updateFPS(fps);
-}
-
-function savePref(key,value) {
-	if (window.widget) {
-		widget.setPreferenceForKey(value,wid+key);
-	}
 }
 
 function updatePrefs() {
@@ -452,7 +446,7 @@ function versionCheck(event) {
 		document.getElementById("newVersion").innerHTML = "version "+versions[0]+"<br/>"+versions[1];
 		showUpdate();
 	} else {
-		alert("you have an up to date version, or there's been an error");
+//		alert("you have an up to date version, or there's been an error");
 	}
 }
 

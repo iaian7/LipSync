@@ -24,3 +24,4 @@ var localizedStrings = {
     "successAEoutput": "sequential phoneme list",
     "wrong": "wrong file format\nplease try again"
 };
+
